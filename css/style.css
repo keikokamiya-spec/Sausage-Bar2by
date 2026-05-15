@@ -595,78 +595,146 @@ address { font-style: normal; }
   line-height: 2;
 }
 
-.beer__stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin: 56px 0;
-  border: 1px solid rgba(200,137,58,.25);
-  border-radius: var(--radius-md);
-  overflow: hidden;
+/* --- Stats Band --- */
+.beer__stats-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 56px clamp(20px, 6vw, 80px);
+  border-top: 1px solid rgba(200,137,58,.15);
+  border-bottom: 1px solid rgba(200,137,58,.15);
 }
-.beer__stat {
+.beer__stat-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
-  background: rgba(255,255,255,.03);
-  border-right: 1px solid rgba(200,137,58,.15);
+  gap: 10px;
+  text-align: center;
 }
-.beer__stat:last-child { border-right: none; }
+.beer__stat-inner {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  line-height: 1;
+}
+.beer__stat-pre {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(.9rem, 2vw, 1.1rem);
+  color: var(--amber-light);
+  font-weight: 300;
+  margin-right: 4px;
+}
 .beer__stat-num {
   font-family: var(--font-en);
-  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-size: clamp(4rem, 9vw, 7rem);
   font-weight: 600;
   color: var(--amber);
   line-height: 1;
+  text-shadow: 0 0 40px rgba(200,137,58,.35);
 }
 .beer__stat-unit {
   font-family: var(--font-jp-serif);
-  font-size: .9rem;
-  color: var(--tan);
-  margin-top: 4px;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: var(--amber-light);
+  font-weight: 300;
 }
 .beer__stat-label {
-  font-size: .72rem;
-  color: rgba(255,255,255,.4);
-  letter-spacing: .1em;
-  margin-top: 8px;
+  font-family: var(--font-jp-serif);
+  font-size: clamp(.72rem, 1.2vw, .85rem);
+  color: rgba(255,255,255,.45);
+  letter-spacing: .12em;
+}
+.beer__stat-sep {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(200,137,58,.35), transparent);
+  flex-shrink: 0;
+  margin: 0 clamp(16px, 4vw, 56px);
 }
 
-.beer__types {
+/* --- Photo Grid --- */
+.beer__photo-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding-bottom: 16px;
+  gap: 0;
 }
-.beer-type-card {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(200,137,58,.2);
-  border-radius: var(--radius-md);
-  padding: 28px 20px;
-  text-align: center;
-  transition: var(--transition);
+.beer-photo-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  cursor: pointer;
 }
-.beer-type-card:hover {
-  background: rgba(200,137,58,.1);
-  border-color: var(--amber);
-  transform: translateY(-4px);
+.beer-photo-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
 }
-.beer-type-card__icon {
-  font-size: 2rem;
-  margin-bottom: 12px;
+.beer-photo-card:hover .beer-photo-card__img {
+  transform: scale(1.08);
 }
-.beer-type-card__name {
-  font-family: var(--font-jp-serif);
-  font-size: .95rem;
+.beer-photo-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(20,12,6,.92) 0%,
+    rgba(20,12,6,.5)  40%,
+    rgba(20,12,6,.15) 100%
+  );
+  transition: background var(--transition);
+}
+.beer-photo-card:hover .beer-photo-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(20,12,6,.95) 0%,
+    rgba(20,12,6,.55) 45%,
+    rgba(200,137,58,.1) 100%
+  );
+}
+.beer-photo-card__body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 24px;
+  transform: translateY(8px);
+  transition: transform var(--transition);
+}
+.beer-photo-card:hover .beer-photo-card__body {
+  transform: translateY(0);
+}
+.beer-photo-card__tag {
+  display: block;
+  font-family: var(--font-en);
+  font-size: .65rem;
   font-weight: 400;
-  color: var(--amber-pale);
-  margin-bottom: 10px;
+  letter-spacing: .25em;
+  color: var(--amber);
+  margin-bottom: 8px;
+  text-transform: uppercase;
 }
-.beer-type-card__desc {
-  font-size: .8rem;
-  color: rgba(255,255,255,.5);
+.beer-photo-card__name {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(.95rem, 1.5vw, 1.15rem);
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.beer-photo-card__desc {
+  font-size: .78rem;
+  color: rgba(255,255,255,.65);
   line-height: 1.7;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .35s ease .05s, transform .35s ease .05s;
+}
+.beer-photo-card:hover .beer-photo-card__desc {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 
@@ -1284,7 +1352,8 @@ address { font-style: normal; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
-  .beer__types { grid-template-columns: repeat(2, 1fr); }
+  .beer__photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .beer-photo-card__desc { opacity: 1; transform: none; }
   .menu-card { flex: 0 0 calc(50% - 12px); }
   .ig-slider__slide { flex: 0 0 calc(33.333% - 8px); }
 }
@@ -1327,10 +1396,11 @@ address { font-style: normal; }
   .concept__interior-item:last-child { display: none; }
 
   /* Beer */
-  .beer__stats { grid-template-columns: 1fr; gap: 0; }
-  .beer__stat { border-right: none; border-bottom: 1px solid rgba(200,137,58,.15); }
-  .beer__stat:last-child { border-bottom: none; }
-  .beer__types { grid-template-columns: repeat(2, 1fr); }
+  .beer__stats-band { flex-direction: column; gap: 32px; padding: 40px 24px; }
+  .beer__stat-sep { width: 80px; height: 1px; margin: 0; background: linear-gradient(to right, transparent, rgba(200,137,58,.35), transparent); }
+  .beer__photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .beer-photo-card { aspect-ratio: 4/3; }
+  .beer-photo-card__desc { opacity: 1; transform: none; }
 
   /* Sausage */
   .sausage__grid { grid-template-columns: 1fr; gap: 36px; }
@@ -1360,7 +1430,7 @@ address { font-style: normal; }
 
 @media (max-width: 480px) {
   .hero__btns { flex-direction: column; align-items: center; }
-  .beer__types { grid-template-columns: 1fr; }
+  .beer__photo-grid { grid-template-columns: repeat(2, 1fr); }
   .sausage__badges { flex-direction: column; }
   .concept__interior-grid { grid-template-columns: 1fr; }
   .concept__interior-item:last-child { display: block; }
