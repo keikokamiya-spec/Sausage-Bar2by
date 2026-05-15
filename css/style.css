@@ -399,7 +399,16 @@ address { font-style: normal; }
   font-weight: 300;
   letter-spacing: .25em;
   color: var(--amber-pale);
-  margin-bottom: 36px;
+  margin-bottom: 16px;
+}
+.hero__welcome {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(.78rem, 1.8vw, .95rem);
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 32px;
+  letter-spacing: .06em;
 }
 .hero__btns {
   display: flex;
@@ -511,6 +520,29 @@ address { font-style: normal; }
   border-radius: var(--radius-full);
   font-size: .78rem;
   font-weight: 500;
+  letter-spacing: .06em;
+}
+
+.concept__target {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.concept__target-label {
+  font-size: .7rem;
+  color: var(--text-light);
+  letter-spacing: .1em;
+  margin-right: 2px;
+}
+.concept__target span:not(.concept__target-label) {
+  padding: 5px 14px;
+  background: transparent;
+  border: 1px solid var(--tan);
+  color: var(--text-mid);
+  border-radius: var(--radius-full);
+  font-size: .78rem;
   letter-spacing: .06em;
 }
 
