@@ -1396,10 +1396,14 @@ address { font-style: normal; }
   .concept__interior-item:last-child { display: none; }
 
   /* Beer */
-  .beer__stats-band { flex-direction: row; gap: 0; padding: 36px 16px; align-items: center; }
-  .beer__stat-sep { width: 1px; height: 56px; margin: 0 12px; background: linear-gradient(to bottom, transparent, rgba(200,137,58,.35), transparent); }
-  .beer__stat-num { font-size: clamp(2.2rem, 8vw, 4rem); }
-  .beer__stat-label { font-size: .65rem; letter-spacing: .06em; }
+  .beer__stats-band { flex-direction: row; gap: 0; padding: 28px 12px; align-items: center; }
+  .beer__stat-item { flex: 1; min-width: 0; gap: 6px; }
+  .beer__stat-inner { gap: 1px; }
+  .beer__stat-num { font-size: 2rem; }
+  .beer__stat-unit { font-size: .85rem; }
+  .beer__stat-pre { font-size: .75rem; margin-right: 2px; }
+  .beer__stat-label { font-size: .58rem; letter-spacing: .03em; }
+  .beer__stat-sep { width: 1px; height: 44px; margin: 0 8px; flex-shrink: 0; background: linear-gradient(to bottom, transparent, rgba(200,137,58,.35), transparent); }
   .beer__photo-grid { grid-template-columns: repeat(2, 1fr); }
   .beer-photo-card { aspect-ratio: 4/3; }
   .beer-photo-card__desc { opacity: 1; transform: none; }
