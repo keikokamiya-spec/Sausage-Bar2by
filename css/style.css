@@ -1015,25 +1015,30 @@ address { font-style: normal; }
   margin-top: -20px;
 }
 
-.instagram__embed {
-  position: relative;
-  width: min(100%, 620px);
-  margin-inline: auto;
+.insta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
 }
 
-.instagram__embed .instagram-media {
-  margin-inline: auto !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  border-radius: var(--radius-md) !important;
+.insta-item {
+  flex: 1 1 200px;
+  max-width: 250px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+  border-radius: 8px;
 }
 
-.instagram__embed-credit {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+.insta-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.insta-item img:hover {
+  transform: scale(1.05);
 }
 
 .instagram__cta {

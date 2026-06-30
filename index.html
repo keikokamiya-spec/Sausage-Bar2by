@@ -423,20 +423,7 @@
 
       <p class="instagram__handle reveal">@sausagebar2by</p>
 
-      <div class="instagram__embed reveal">
-        <blockquote
-          class="instagram-media"
-          data-instgrm-permalink="https://www.instagram.com/sausagebar2by/"
-          data-instgrm-version="12"
-        >
-          <a href="https://www.instagram.com/sausagebar2by/" target="_blank" rel="noopener noreferrer">
-            @sausagebar2by の最新投稿を見る
-          </a>
-        </blockquote>
-        <div class="instagram__embed-credit" aria-hidden="true">
-          <a href="https://instaembedcode.com/" target="_blank" rel="noopener noreferrer">Instagram embed</a>
-        </div>
-      </div>
+      <div id="insta-gallery" class="insta-grid reveal"></div>
 
       <div class="instagram__cta reveal">
         <a href="https://www.instagram.com/sausagebar2by/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
@@ -617,8 +604,36 @@
     </a>
   </div>
 
-  <script async src="https://www.instagram.com/embed.js"></script>
-  <script async src="https://instaembedcode.com/in.js"></script>
+  <script src="js/instagram-config.js"></script>
+  <script>
+    let apiUrl = window.INSTAGRAM_API_URL;
+
+    if (!apiUrl) {
+      console.warn('Instagram API URL が設定されていないため、ギャラリーの読み込みをスキップしました。');
+    } else {
+      if (apiUrl.includes('datasets/')) {
+        apiUrl = apiUrl.replace(/datasets\/[^\/]+/, 'acts/apify~instagram-scraper/runs/last/dataset');
+      }
+
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const gallery = document.getElementById('insta-gallery');
+
+          data.slice(0, 4).forEach((post) => {
+            const html = `
+              <div class="insta-item">
+                <a href="${post.url}" target="_blank" rel="noopener noreferrer">
+                  <img src="${post.displayUrl}" alt="Instagram投稿">
+                </a>
+              </div>
+            `;
+            gallery.insertAdjacentHTML('beforeend', html);
+          });
+        })
+        .catch((error) => console.error('データの取得に失敗しました:', error));
+    }
+  </script>
   <script src="js/main.js"></script>
 </body>
 </html>
