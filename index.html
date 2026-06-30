@@ -604,35 +604,61 @@
     </a>
   </div>
 
-  <script src="js/instagram-config.js"></script>
   <script>
-    let apiUrl = window.INSTAGRAM_API_URL;
+    const gallery = document.getElementById('insta-gallery');
 
-    if (!apiUrl) {
-      console.warn('Instagram API URL が設定されていないため、ギャラリーの読み込みをスキップしました。');
-    } else {
+    const renderPosts = (posts) => {
+      gallery.innerHTML = '';
+
+      posts.slice(0, 4).forEach((post) => {
+        const html = `
+          <div class="insta-item">
+            <a href="${post.url}" target="_blank" rel="noopener noreferrer">
+              <img src="${post.displayUrl}" alt="Instagram投稿">
+            </a>
+          </div>
+        `;
+        gallery.insertAdjacentHTML('beforeend', html);
+      });
+    };
+
+    const normalizeApiUrl = (apiUrl) => {
       if (apiUrl.includes('datasets/')) {
-        apiUrl = apiUrl.replace(/datasets\/[^\/]+/, 'acts/apify~instagram-scraper/runs/last/dataset');
+        return apiUrl.replace(/datasets\/[^\/]+/, 'acts/apify~instagram-scraper/runs/last/dataset');
+      }
+      return apiUrl;
+    };
+
+    const loadOptionalConfig = () => new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'js/instagram-config.js';
+      script.onload = () => resolve(window.INSTAGRAM_API_URL || null);
+      script.onerror = () => resolve(null);
+      document.head.appendChild(script);
+    });
+
+    const fetchPosts = async (sourceUrl) => {
+      const response = await fetch(sourceUrl, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    };
+
+    (async () => {
+      const localApiUrl = await loadOptionalConfig();
+
+      if (localApiUrl) {
+        try {
+          renderPosts(await fetchPosts(normalizeApiUrl(localApiUrl)));
+          return;
+        } catch (error) {
+          console.warn('Instagram API からの取得に失敗したため、ローカルJSONにフォールバックします。', error);
+        }
       }
 
-      fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          const gallery = document.getElementById('insta-gallery');
-
-          data.slice(0, 4).forEach((post) => {
-            const html = `
-              <div class="insta-item">
-                <a href="${post.url}" target="_blank" rel="noopener noreferrer">
-                  <img src="${post.displayUrl}" alt="Instagram投稿">
-                </a>
-              </div>
-            `;
-            gallery.insertAdjacentHTML('beforeend', html);
-          });
-        })
-        .catch((error) => console.error('データの取得に失敗しました:', error));
-    }
+      renderPosts(await fetchPosts('data/instagram.json'));
+    })().catch((error) => {
+      console.error('Instagram投稿データの取得に失敗しました:', error);
+    });
   </script>
   <script src="js/main.js"></script>
 </body>
