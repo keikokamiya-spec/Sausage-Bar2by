@@ -78,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Slider factory ---------- */
   function initSlider(sliderEl) {
-    const track = sliderEl.querySelector('.menu__slider-track, .ig-slider__track');
-    const dots = sliderEl.querySelectorAll('.menu__slider-dot, .ig-slider__dot');
+    const track = sliderEl.querySelector('.menu__slider-track');
+    const dots = sliderEl.querySelectorAll('.menu__slider-dot');
     const prevBtn = sliderEl.querySelector('.menu__slider-btn--prev');
     const nextBtn = sliderEl.querySelector('.menu__slider-btn--next');
     if (!track) return;
@@ -88,16 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let current = 0;
     let perView = getPerView();
     let total = Math.max(0, slides.length - perView);
-    let autoplayTimer = null;
 
     function getPerView() {
       const w = window.innerWidth;
-      if (sliderEl.classList.contains('ig-slider')) {
-        if (w <= 480) return 1;
-        if (w <= 768) return 2;
-        if (w <= 1024) return 3;
-        return 6;
-      }
       if (w <= 480) return 1;
       if (w <= 768) return 1;
       if (w <= 1024) return 2;
@@ -118,9 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
       dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
     }
 
-    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
-    dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); resetAutoplay(); }));
+    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); }));
 
     /* Touch / swipe */
     let touchStartX = 0;
@@ -128,18 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     track.addEventListener('touchend', e => {
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
-      resetAutoplay();
     });
-
-    /* Autoplay for ig-slider only */
-    function startAutoplay() {
-      if (!sliderEl.classList.contains('ig-slider')) return;
-      autoplayTimer = setInterval(() => goTo(current >= total ? 0 : current + 1), 3200);
-    }
-    function resetAutoplay() {
-      clearInterval(autoplayTimer);
-      startAutoplay();
-    }
 
     window.addEventListener('resize', () => {
       perView = getPerView();
@@ -147,10 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     goTo(0);
-    startAutoplay();
   }
 
-  document.querySelectorAll('.menu__slider, .ig-slider').forEach(initSlider);
+  document.querySelectorAll('.menu__slider').forEach(initSlider);
 
   /* ---------- Floating CTA ---------- */
   const floatingCta = document.getElementById('floatingCta');
